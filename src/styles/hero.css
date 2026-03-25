@@ -22,12 +22,20 @@
   flex-shrink: 0;
 }
 
+.hero__bw-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  backdrop-filter: grayscale(100%);
+  pointer-events: none;
+}
+
 .hero__portrait img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center top;
-  filter: grayscale(100%) contrast(1.1);
+  filter: contrast(1.1);
   opacity: 0;
   transform: scale(1.04);
   transition: opacity 0.8s ease, transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -77,6 +85,21 @@
   top: 58%;
   left: 20%;
   transform: translateY(70%);
+}
+
+.hero__tagline {
+  position: absolute;
+  bottom: 6%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Exo 2', sans-serif;
+  font-weight: 300;
+  font-style: normal;
+  font-size: clamp(0.75rem, 1.2vw, 1rem);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: white;
+  white-space: nowrap;
 }
 
 
