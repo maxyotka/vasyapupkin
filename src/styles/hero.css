@@ -68,7 +68,7 @@
   font-size: clamp(3rem, 12vw, 13rem);
   line-height: 0.85;
   letter-spacing: 0.03em;
-  text-transform: uppercase;
+  text-transform: none;
   color: white;
   white-space: nowrap;
 }
@@ -97,7 +97,7 @@
   font-style: normal;
   font-size: clamp(0.75rem, 1.2vw, 1rem);
   letter-spacing: 0.25em;
-  text-transform: uppercase;
+  text-transform: none;
   color: white;
   white-space: nowrap;
 }
