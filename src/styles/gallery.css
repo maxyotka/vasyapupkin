@@ -1,0 +1,220 @@
+/* src/styles/gallery.css */
+
+/* Page header */
+.gallery-header {
+  padding: clamp(6rem, 12vh, 10rem) clamp(1.5rem, 5vw, 6rem) clamp(2rem, 4vh, 4rem);
+  border-bottom: 1px solid var(--border);
+}
+
+.gallery-header__back {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-decoration: none;
+  opacity: 0.45;
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  transition: opacity 0.2s;
+}
+
+.gallery-header__back:hover { opacity: 1; }
+
+.gallery-header__title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(4rem, 12vw, 12rem);
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  color: var(--text);
+}
+
+.gallery-header__sub {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text);
+  opacity: 0.5;
+  margin-top: 1.5rem;
+}
+
+/* ─── Horizontal video strip ─── */
+.gallery-strip {
+  padding: clamp(2rem, 5vh, 4rem) 0;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.gallery-strip::-webkit-scrollbar { display: none; }
+
+.gallery-strip__track {
+  display: flex;
+  gap: 1px;
+  padding: 0 clamp(1.5rem, 5vw, 6rem);
+  width: max-content;
+}
+
+.gallery-strip .gallery-item {
+  flex-shrink: 0;
+  width: clamp(280px, 35vw, 560px);
+}
+
+.gallery-strip .gallery-item__thumb {
+  aspect-ratio: 16 / 9;
+}
+
+/* ─── Masonry photo grid ─── */
+.gallery-masonry {
+  padding: clamp(2rem, 5vh, 4rem) clamp(1.5rem, 5vw, 6rem);
+}
+
+.gallery-masonry__grid {
+  columns: 3;
+  column-gap: 1px;
+}
+
+
+/* ─── Shared gallery item ─── */
+.gallery-item {
+  display: block;
+  cursor: pointer;
+  break-inside: avoid;
+  margin-bottom: 1px;
+}
+
+.gallery-item__thumb {
+  position: relative;
+  overflow: hidden;
+  display: block;
+}
+
+.gallery-item__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(100%);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.4s ease;
+}
+
+.gallery-item:hover .gallery-item__thumb img {
+  transform: scale(1.04);
+  filter: grayscale(0%);
+}
+
+.gallery-item__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 10, 0);
+  transition: background 0.3s ease;
+}
+
+.gallery-item:hover .gallery-item__overlay {
+  background: rgba(10, 10, 10, 0.15);
+}
+
+/* Play button on video items */
+.gallery-item--video .gallery-item__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.85);
+  width: 3rem;
+  height: 3rem;
+  color: #ffffff;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 2;
+}
+
+.gallery-item--video:hover .gallery-item__play {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.gallery-item__label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+  opacity: 0.5;
+  padding: 0.5rem 0 0;
+}
+
+/* ─── Lightbox ─── */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.95);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.lightbox.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lightbox__close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  z-index: 10;
+}
+
+.lightbox__close:hover { opacity: 1; }
+
+.lightbox__close svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.lightbox__content {
+  max-width: min(90vw, 1200px);
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox__content img {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  display: block;
+}
+
+.lightbox__content iframe {
+  width: min(90vw, 960px);
+  aspect-ratio: 16 / 9;
+  border: none;
+}

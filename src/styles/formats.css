@@ -1,0 +1,132 @@
+/* src/styles/formats.css */
+
+.formats {
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--text);
+}
+
+.formats__track {
+  display: flex;
+  /* width set dynamically in formats-scroll.js based on panel count */
+  height: 100%;
+}
+
+.format-panel {
+  width: 100vw;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  flex-shrink: 0;
+}
+
+.format-panel__fill {
+  background: var(--text);
+  clip-path: inset(100% 0 0 0);
+  transition: none; /* animated by GSAP */
+  overflow: hidden;
+  position: relative;
+}
+
+.format-panel__fill img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(100%);
+  transition: filter 0.5s ease;
+}
+
+.format-panel:hover .format-panel__fill img,
+.format-panel.is-colored .format-panel__fill img {
+  filter: grayscale(0%);
+}
+
+.format-panel__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(2rem, 6vw, 8rem);
+  background: var(--bg);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.format-panel__content:hover {
+  background: var(--text);
+  color: var(--bg);
+}
+
+/* Alternate: odd panels have fill on left */
+.format-panel:nth-child(odd) .format-panel__fill   { order: 1; }
+.format-panel:nth-child(odd) .format-panel__content { order: 2; }
+.format-panel:nth-child(even) .format-panel__fill   { order: 2; }
+.format-panel:nth-child(even) .format-panel__content { order: 1; }
+
+.format-panel__name {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(3rem, 8vw, 10rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  opacity: 0;
+  transform: translateY(40px);
+  /* animation state reset; GSAP will drive these */
+}
+
+.format-panel__desc {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.5;
+  max-width: 320px;
+  margin-top: 1.5rem;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Reduced motion: show content immediately, skip GSAP initial states */
+@media (prefers-reduced-motion: reduce) {
+  .format-panel__name,
+  .format-panel__desc { opacity: 1; transform: none; }
+  .format-panel__fill { clip-path: inset(0); }
+}
+
+/* Mobile: stacked vertical panels */
+@media (max-width: 768px) {
+  .formats { height: auto; overflow: visible; }
+  .formats__track { width: 100%; flex-direction: column; }
+  .format-panel {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    grid-template-columns: 1fr;
+    grid-template-rows: 50vw auto;
+  }
+  /* Reset ordering — always image on top, content below */
+  .format-panel__fill { order: 1 !important; }
+  .format-panel__content { order: 2 !important; }
+
+  .format-panel__fill {
+    clip-path: inset(0);
+    min-height: 50vw;
+  }
+  .format-panel__content {
+    padding: clamp(1.5rem, 5vw, 2.5rem);
+  }
+  .format-panel__name {
+    font-size: clamp(2rem, 10vw, 3.5rem);
+    opacity: 1;
+    transform: none;
+  }
+  .format-panel__desc {
+    font-size: 0.9rem;
+    max-width: none;
+    opacity: 1;
+    transform: none;
+  }
+}

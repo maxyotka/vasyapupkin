@@ -1,0 +1,139 @@
+/* src/styles/blog.css */
+
+/* ─── Blog page header ─── */
+.blog-header {
+  padding: clamp(6rem, 12vh, 10rem) clamp(1.5rem, 5vw, 6rem) clamp(2rem, 4vh, 4rem);
+  border-bottom: 1px solid var(--border);
+}
+
+.blog-header__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(4rem, 12vw, 12rem);
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  color: var(--text);
+}
+
+.blog-header__title em {
+  font-style: italic;
+}
+
+.blog-header__sub {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text);
+  opacity: 0.5;
+  margin-top: 1.5rem;
+}
+
+/* ─── Scattered canvas ─── */
+.blog-scatter {
+  position: relative;
+  min-height: 100vh;
+  padding: clamp(3rem, 8vh, 6rem) clamp(1.5rem, 5vw, 6rem);
+}
+
+.blog-scatter__canvas {
+  position: relative;
+  /* Height set by JS after card placement */
+}
+
+/* ─── Blog card (newspaper clipping) ─── */
+.blog-card {
+  position: absolute;
+  width: clamp(260px, 28vw, 380px);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: clamp(1.25rem, 3vw, 2rem);
+  cursor: pointer;
+  /* rotation driven by --card-rotate CSS custom property set in JS */
+  transform: rotate(var(--card-rotate, 0deg));
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s ease;
+  will-change: transform;
+}
+
+.blog-card:hover {
+  transform: translateY(-6px) rotate(var(--card-rotate, 0deg));
+  box-shadow: 0 12px 40px rgba(10, 10, 10, 0.12);
+  z-index: 10;
+}
+
+.blog-card__link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.blog-card__date {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text);
+  opacity: 0.45;
+}
+
+.blog-card__title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.blog-card__excerpt {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--text);
+  opacity: 0.7;
+}
+
+.blog-card__read {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-top: 0.25rem;
+  transition: opacity 0.2s;
+}
+
+.blog-card:hover .blog-card__read { opacity: 0.5; }
+
+/* ─── Mobile: switch to vertical flow ─── */
+@media (max-width: 768px) {
+  .blog-scatter {
+    padding-bottom: 2rem;
+  }
+
+  .blog-scatter__canvas {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .blog-card {
+    position: static;
+    width: 100%;
+    transform: none !important;
+  }
+
+  .blog-card:hover {
+    transform: none !important;
+    box-shadow: none;
+  }
+}

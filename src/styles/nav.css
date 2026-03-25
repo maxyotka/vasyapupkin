@@ -1,0 +1,139 @@
+/* src/styles/nav.css */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem clamp(1.5rem, 4vw, 5rem);
+  pointer-events: none;
+}
+
+.header__left,
+.header__right {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  pointer-events: auto;
+}
+
+.header__item {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: lowercase;
+  color: var(--text);
+  transition: opacity 0.2s;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.header__item:hover { opacity: 0.5; }
+
+/* Home link (subpages) */
+.header__home {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: opacity 0.2s;
+  line-height: 1;
+}
+.header__home:hover { opacity: 0.5; }
+
+/* Scrolled state */
+.header.is-scrolled {
+  background: transparent;
+}
+
+/* ── Contact dropdown (sibling of header, NOT inside it) ── */
+/* Must be outside .header so it doesn't inherit mix-blend-mode */
+.contact-dropdown {
+  position: fixed;
+  top: 4rem; /* just below header */
+  left: clamp(1.5rem, 4vw, 5rem);
+  z-index: 99;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.contact-dropdown.is-open {
+  grid-template-rows: 1fr;
+}
+
+.contact-dropdown__inner {
+  overflow: hidden;
+  background: var(--bg);
+  padding: 0 1rem;
+  border-left: 1px solid var(--border);
+}
+
+.contact-dropdown__list {
+  padding: 1rem 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  list-style: none;
+}
+
+.contact-dropdown__item a {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: 0.02em;
+  transition: opacity 0.2s;
+}
+
+.contact-dropdown__item a:hover { opacity: 0.5; }
+
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem clamp(1rem, 3vw, 1.5rem);
+  }
+  .header__left,
+  .header__right {
+    gap: 0;
+  }
+  .header__home {
+    font-size: 0.85rem;
+  }
+  .header__item {
+    font-size: 0.8rem;
+    padding: 0.75rem 0.6rem;
+    /* 44px min tap target */
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+  .contact-dropdown {
+    top: 3.5rem;
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+  .contact-dropdown__inner {
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 0 clamp(1rem, 3vw, 1.5rem);
+  }
+  .contact-dropdown__item a {
+    display: block;
+    padding: 0.5rem 0;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+}

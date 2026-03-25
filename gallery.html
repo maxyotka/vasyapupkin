@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Галерея — Влад Ковальский</title>
+  <meta name="description" content="Фото и видео с мероприятий ведущего Влада Ковальского." />
+  <meta property="og:title" content="Галерея — Влад Ковальский" />
+  <meta property="og:description" content="Фото и видео с мероприятий ведущего Влада Ковальского." />
+  <meta property="og:image" content="https://vladkovalsky.ru/og-image.jpg" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800;0,900;1,400;1,700;1,800;1,900&family=Exo+2:ital,wght@0,200;0,300;0,400;0,500;0,600;1,200;1,300;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/styles/base.css" />
+  <link rel="stylesheet" href="/src/styles/nav.css" />
+  <link rel="stylesheet" href="/src/styles/gallery.css" />
+  <link rel="stylesheet" href="/src/styles/footer.css" />
+  <link rel="stylesheet" href="/src/styles/responsive.css" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
+  <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="header__left">
+      <a class="header__home" href="/">Влад Ковальский</a>
+    </div>
+    <nav class="header__right" aria-label="Основная навигация">
+      <button class="header__item" id="contactBtn" aria-expanded="false" aria-controls="contactDropdown">Контакт</button>
+      <a class="header__item" href="/gallery.html">Галерея</a>
+      <a class="header__item" href="/blog.html">Мои мысли</a>
+    </nav>
+  </header>
+
+  <!-- Contact dropdown -->
+  <div class="contact-dropdown" id="contactDropdown" aria-labelledby="contactBtn" aria-hidden="true">
+    <div class="contact-dropdown__inner">
+      <ul class="contact-dropdown__list">
+        <li class="contact-dropdown__item">
+          <a href="https://t.me/vladkovalsky" target="_blank" rel="noopener noreferrer">@vladkovalsky — Telegram</a>
+        </li>
+        <li class="contact-dropdown__item">
+          <a href="https://vk.com/vladkovalsky" target="_blank" rel="noopener noreferrer">vk.com/vladkovalsky</a>
+        </li>
+        <li class="contact-dropdown__item">
+          <a href="tel:+79991234567">+7 (999) 123-45-67</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <main>
+
+    <!-- Gallery header -->
+    <section class="gallery-header">
+      <h1 class="gallery-header__title">Галерея</h1>
+      <p class="gallery-header__sub">Моменты, которые остаются.</p>
+    </section>
+
+    <!-- Horizontal video strip (landscape) -->
+    <!-- TODO: replace placeholder YouTube URLs with real video IDs before deploy -->
+    <section class="gallery-strip" aria-label="Видео">
+      <div class="gallery-strip__track">
+
+        <div class="gallery-item gallery-item--video" tabindex="0" role="button" aria-label="Открыть видео: Свадьба 2025" data-src="https://www.youtube.com/embed/dQw4w9WgXcQ" data-type="youtube">
+          <div class="gallery-item__thumb">
+            <img src="/photos/adyshkin.com_pt-27.jpg" alt="Свадьба — видео 1" width="640" height="360" loading="lazy" />
+            <div class="gallery-item__overlay">
+              <svg class="gallery-item__play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </div>
+          </div>
+          <span class="gallery-item__label">Свадьба 2025</span>
+        </div>
+
+        <div class="gallery-item gallery-item--video" tabindex="0" role="button" aria-label="Открыть видео: Корпоратив" data-src="https://www.youtube.com/embed/dQw4w9WgXcQ" data-type="youtube">
+          <div class="gallery-item__thumb">
+            <img src="/photos/adyshkin.com_pt-30.jpg" alt="Корпоратив — видео 2" width="640" height="360" loading="lazy" />
+            <div class="gallery-item__overlay">
+              <svg class="gallery-item__play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </div>
+          </div>
+          <span class="gallery-item__label">Корпоратив</span>
+        </div>
+
+        <div class="gallery-item gallery-item--video" tabindex="0" role="button" aria-label="Открыть видео: Частный вечер" data-src="https://www.youtube.com/embed/dQw4w9WgXcQ" data-type="youtube">
+          <div class="gallery-item__thumb">
+            <img src="/photos/adyshkin.com_pt-34.jpg" alt="Частный вечер — видео 3" width="640" height="360" loading="lazy" />
+            <div class="gallery-item__overlay">
+              <svg class="gallery-item__play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </div>
+          </div>
+          <span class="gallery-item__label">Частный вечер</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Masonry photo grid (portrait) -->
+    <section class="gallery-masonry" aria-label="Фотографии">
+      <div class="gallery-masonry__grid">
+
+        <div class="gallery-item gallery-item--photo" tabindex="0" role="button" aria-label="Открыть фото: На мероприятии" data-type="photo" data-src="/photos/adyshkin.com_pt-1.jpg">
+          <div class="gallery-item__thumb">
+            <img src="/photos/adyshkin.com_pt-1.jpg" alt="На мероприятии" width="480" height="600" loading="lazy" />
+            <div class="gallery-item__overlay"></div>
+          </div>
+        </div>
+
+        <div class="gallery-item gallery-item--photo" tabindex="0" role="button" aria-label="Открыть фото: Свадьба" data-type="photo" data-src="/photos/adyshkin.com_pt-3.jpg">
+          <div class="gallery-item__thumb">
+            <img src="/photos/adyshkin.com_pt-3.jpg" alt="Свадьба" width="480" height="720" loading="lazy" />
+            <div class="gallery-item__overlay"></div>
+          </div>
+        </div>
+
+        <div class="gallery-item gallery-item--photo" tabindex="0" role="button" aria-label="Открыть фото: Работа с залом" data-type="photo" data-src="/photos/adyshkin.com_pt-7.jpg">
+          <div class="gallery-item__thumb">
+            <img src="/photos/adyshkin.com_pt-7.jpg" alt="Работа с залом" width="480" height="560" loading="lazy" />
+            <div class="gallery-item__overlay"></div>
+          </div>
+        </div>
+
+        <div class="gallery-item gallery-item--photo" tabindex="0" role="button" aria-label="Открыть фото: Корпоратив" data-type="photo" data-src="/photos/adyshkin.com_pt-9.jpg">
+          <div class="gallery-item__thumb">
+            <img src="/photos/adyshkin.com_pt-9.jpg" alt="Корпоратив" width="480" height="640" loading="lazy" />
+            <div class="gallery-item__overlay"></div>
+          </div>
+        </div>
+
+        <div class="gallery-item gallery-item--photo" tabindex="0" role="button" aria-label="Открыть фото: Вечер" data-type="photo" data-src="/photos/adyshkin.com_pt-11.jpg">
+          <div class="gallery-item__thumb">
+            <img src="/photos/adyshkin.com_pt-11.jpg" alt="Вечер" width="480" height="680" loading="lazy" />
+            <div class="gallery-item__overlay"></div>
+          </div>
+        </div>
+
+        <div class="gallery-item gallery-item--photo" tabindex="0" role="button" aria-label="Открыть фото: Эмоции гостей" data-type="photo" data-src="/photos/adyshkin.com_pt-15.jpg">
+          <div class="gallery-item__thumb">
+            <img src="/photos/adyshkin.com_pt-15.jpg" alt="Эмоции гостей" width="480" height="600" loading="lazy" />
+            <div class="gallery-item__overlay"></div>
+          </div>
+        </div>
+
+        <div class="gallery-item gallery-item--photo" tabindex="0" role="button" aria-label="Открыть фото: Момент" data-type="photo" data-src="/photos/adyshkin.com_pt-17.jpg">
+          <div class="gallery-item__thumb">
+            <img src="/photos/adyshkin.com_pt-17.jpg" alt="Момент" width="480" height="640" loading="lazy" />
+            <div class="gallery-item__overlay"></div>
+          </div>
+        </div>
+
+        <div class="gallery-item gallery-item--photo" tabindex="0" role="button" aria-label="Открыть фото: Зал" data-type="photo" data-src="/photos/adyshkin.com_pt-19.jpg">
+          <div class="gallery-item__thumb">
+            <img src="/photos/adyshkin.com_pt-19.jpg" alt="Зал" width="480" height="560" loading="lazy" />
+            <div class="gallery-item__overlay"></div>
+          </div>
+        </div>
+
+        <div class="gallery-item gallery-item--photo" tabindex="0" role="button" aria-label="Открыть фото: Частный вечер" data-type="photo" data-src="/photos/adyshkin.com_pt-21.jpg">
+          <div class="gallery-item__thumb">
+            <img src="/photos/adyshkin.com_pt-21.jpg" alt="Частный вечер" width="480" height="720" loading="lazy" />
+            <div class="gallery-item__overlay"></div>
+          </div>
+        </div>
+
+        <div class="gallery-item gallery-item--photo" tabindex="0" role="button" aria-label="Открыть фото: Атмосфера" data-type="photo" data-src="/photos/adyshkin.com_pt-23.jpg">
+          <div class="gallery-item__thumb">
+            <img src="/photos/adyshkin.com_pt-23.jpg" alt="Атмосфера" width="480" height="600" loading="lazy" />
+            <div class="gallery-item__overlay"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-modal="true" role="dialog" aria-label="Просмотр" hidden>
+    <button class="lightbox__close" id="lightboxClose" aria-label="Закрыть">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
+    <div class="lightbox__content" id="lightboxContent"></div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer" id="footer">
+    <div class="footer__contacts">
+      <a href="tel:+79991234567" class="footer__contact-item">+7 (999) 123-45-67</a>
+      <a href="mailto:hello@vladkovalsky.ru" class="footer__contact-item">hello@vladkovalsky.ru</a>
+      <a href="https://t.me/vladkovalsky" target="_blank" rel="noopener noreferrer" class="footer__contact-item">@vladkovalsky</a>
+    </div>
+    <div class="footer__bottom">
+      <span class="footer__copy">© 2026 Влад Ковальский</span>
+      <a class="footer__credit" href="https://gundyrev.com" target="_blank" rel="noopener noreferrer">by Gundyrev</a>
+    </div>
+  </footer>
+
+  <script type="module" src="/src/gallery.js"></script>
+</body>
+</html>
