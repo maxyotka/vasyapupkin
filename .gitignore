@@ -1,0 +1,17 @@
+node_modules/
+dist/
+test-results/
+.env
+*.log
+.vite/
+.superpowers/
+
+# Медиа-материалы (большие файлы, не нужны в git)
+1. Промо Ведущий Влад Ковальский/
+vladislav_2026-02-05/
+adyshkin.com_pt-81.jpg
+docs/
+*.MOV
+*.mov
+*.mp4
+*.MP4

@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hero Font Playground</title>
+<link href="https://fonts.cdnfonts.com/css/nk57-monospace" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: #111;
+    color: #ccc;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .workspace {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ── Controls ── */
+  .panel {
+    background: #1a1a1a;
+    border-right: 1px solid #2a2a2a;
+    overflow-y: auto;
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .panel-title {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #555;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #2a2a2a;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #444;
+    margin-bottom: 2px;
+  }
+
+  /* Font buttons */
+  .font-list { display: flex; flex-direction: column; gap: 3px; }
+
+  .font-btn {
+    background: #1e1e1e;
+    border: 1px solid #2a2a2a;
+    color: #aaa;
+    padding: 9px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .font-btn:hover { background: #252525; border-color: #444; color: #ddd; }
+  .font-btn.active { background: #fff; color: #111; border-color: #fff; }
+  .font-btn .tag { font-size: 10px; color: #555; }
+  .font-btn.active .tag { color: #888; }
+
+  .sep { height: 1px; background: #2a2a2a; margin: 6px 0; }
+
+  .search-input {
+    width: 100%;
+    background: #222;
+    border: 1px solid #333;
+    color: #ddd;
+    font-size: 12px;
+    padding: 7px 10px;
+    outline: none;
+    margin-bottom: 4px;
+    transition: border-color 0.15s;
+  }
+  .search-input:focus { border-color: #888; }
+  .search-input::placeholder { color: #555; }
+
+  .font-group { margin-bottom: 4px; }
+
+  .font-group-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 0;
+    cursor: pointer;
+    user-select: none;
+  }
+  .font-group-header:hover .font-group-title { color: #ccc; }
+
+  .font-group-arrow {
+    font-size: 8px;
+    color: #555;
+    transition: transform 0.15s;
+    width: 12px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .font-group.collapsed .font-group-arrow { transform: rotate(-90deg); }
+
+  .font-group-title {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #666;
+    transition: color 0.15s;
+  }
+
+  .font-group-count {
+    font-size: 10px;
+    color: #444;
+    margin-left: auto;
+  }
+
+  .font-group-body {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding-bottom: 6px;
+  }
+  .font-group.collapsed .font-group-body { display: none; }
+
+  /* ── Number field (Figma-style) ── */
+  .props { display: flex; flex-direction: column; gap: 8px; }
+
+  .prop {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 32px;
+  }
+
+  .prop-label {
+    font-size: 11px;
+    color: #666;
+    width: 90px;
+    flex-shrink: 0;
+    cursor: default;
+    user-select: none;
+  }
+
+  /* Draggable label — cursor changes to ew-resize on hover */
+  .prop-label.draggable { cursor: ew-resize; }
+  .prop-label.draggable:hover { color: #aaa; }
+  .prop-label.dragging { color: #fff; }
+
+  .prop-input-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: #222;
+    border: 1px solid #333;
+    height: 100%;
+    transition: border-color 0.15s;
+  }
+  .prop-input-wrap:focus-within { border-color: #888; }
+
+  .prop-input {
+    flex: 1;
+    background: none;
+    border: none;
+    color: #ddd;
+    font-family: 'SF Mono', 'Consolas', 'Courier New', monospace;
+    font-size: 12px;
+    padding: 0 8px;
+    height: 100%;
+    outline: none;
+    min-width: 0;
+  }
+  .prop-input::selection { background: #444; }
+
+  .prop-unit {
+    font-size: 10px;
+    color: #555;
+    padding-right: 8px;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .prop-stepper {
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid #333;
+    height: 100%;
+  }
+
+  .prop-step {
+    flex: 1;
+    width: 22px;
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 9px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.1s, background 0.1s;
+    padding: 0;
+    line-height: 1;
+  }
+  .prop-step:hover { background: #2a2a2a; color: #ccc; }
+  .prop-step:active { background: #333; }
+
+  /* Toggle */
+  .toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 32px;
+  }
+  .toggle-row label { font-size: 11px; color: #666; user-select: none; }
+
+  .toggle {
+    width: 36px; height: 20px;
+    background: #333;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s;
+  }
+  .toggle.on { background: #fff; }
+  .toggle::after {
+    content: '';
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 14px; height: 14px;
+    background: #777;
+    border-radius: 50%;
+    transition: all 0.2s;
+  }
+  .toggle.on::after { left: 19px; background: #111; }
+
+  .loading {
+    font-size: 10px;
+    color: #555;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    min-height: 14px;
+  }
+
+  /* ── Preview ── */
+  .right { display: flex; flex-direction: column; overflow: hidden; }
+
+  .preview-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-portrait {
+    position: relative;
+    z-index: 2;
+    width: clamp(200px, 25vw, 400px);
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #d5d0c8;
+  }
+
+  .hero-portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    filter: grayscale(100%) contrast(1.1);
+  }
+
+  .hero-name {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    mix-blend-mode: difference;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .hero-name-first,
+  .hero-name-last {
+    position: absolute;
+    font-weight: 700;
+    line-height: 0.85;
+    color: white;
+    white-space: nowrap;
+    cursor: grab;
+    pointer-events: auto;
+    transition: font-family 0.2s, font-size 0.2s, letter-spacing 0.2s, font-weight 0.2s;
+    /* Framer-style selection frame */
+    outline: 1px solid rgba(0, 120, 255, 0);
+    outline-offset: 6px;
+  }
+  .hero-name-first:hover,
+  .hero-name-last:hover {
+    outline-color: rgba(0, 120, 255, 0.5);
+  }
+  .hero-name-first.selected,
+  .hero-name-last.selected {
+    outline-color: rgba(0, 120, 255, 1);
+  }
+  .hero-name-first:active,
+  .hero-name-last:active { cursor: grabbing; }
+
+  /* Corner handles */
+  .handle {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    background: #fff;
+    border: 1.5px solid #0078ff;
+    border-radius: 1px;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 20;
+  }
+  .selected > .handle { opacity: 1; }
+  .handle--tl { top: -4px; left: -4px; }
+  .handle--tr { top: -4px; right: -4px; }
+  .handle--bl { bottom: -4px; left: -4px; }
+  .handle--br { bottom: -4px; right: -4px; }
+
+  /* Distance lines on drag */
+  .dist-line {
+    position: absolute;
+    background: #ff3366;
+    z-index: 15;
+    pointer-events: none;
+    display: none;
+  }
+  .dist-line--h { height: 1px; }
+  .dist-line--v { width: 1px; }
+  .dist-label {
+    position: absolute;
+    font-size: 9px;
+    font-family: -apple-system, system-ui, sans-serif;
+    color: #ff3366;
+    background: rgba(255,255,255,0.85);
+    padding: 1px 4px;
+    border-radius: 2px;
+    z-index: 16;
+    pointer-events: none;
+    display: none;
+    white-space: nowrap;
+  }
+
+  .hero-name-first {
+    top: 41%;
+    left: 27%;
+    transform: translateX(-50%) translateY(-70%);
+  }
+
+  .hero-name-last {
+    top: 48%;
+    left: 16%;
+    transform: translateY(70%);
+  }
+
+  /* ── Prompt bar ── */
+  .prompt-bar {
+    background: #161616;
+    border-top: 1px solid #2a2a2a;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .prompt-text {
+    flex: 1;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #888;
+    font-family: 'SF Mono', 'Consolas', 'Courier New', monospace;
+  }
+
+  .copy-btn {
+    background: #222;
+    border: 1px solid #333;
+    color: #888;
+    font-size: 11px;
+    padding: 6px 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .copy-btn:hover { border-color: #555; color: #ccc; }
+  .copy-btn.copied { border-color: #4a8; color: #4a8; }
+
+  @media (max-width: 900px) {
+    .workspace { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+    .panel { border-right: none; border-bottom: 1px solid #2a2a2a; max-height: 300px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="workspace">
+  <aside class="panel">
+    <div class="panel-title">Hero Font Playground</div>
+
+    <div class="section-label">Твои шрифты</div>
+    <div class="font-list" id="userFonts"></div>
+
+    <div class="sep"></div>
+    <input class="search-input" id="fontSearch" type="text" placeholder="Поиск шрифта...">
+    <div id="fontGroups"></div>
+
+    <div class="sep"></div>
+    <div class="section-label">Параметры</div>
+
+    <div class="props">
+      <!-- Font Size -->
+      <div class="prop">
+        <span class="prop-label draggable" data-field="size" data-step="0.5" data-min="3" data-max="24">Size</span>
+        <div class="prop-input-wrap">
+          <input class="prop-input" id="inp-size" type="text" value="12" data-field="size">
+          <span class="prop-unit">vw</span>
+          <div class="prop-stepper">
+            <button class="prop-step" data-field="size" data-dir="1">&#9650;</button>
+            <button class="prop-step" data-field="size" data-dir="-1">&#9660;</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Letter Spacing -->
+      <div class="prop">
+        <span class="prop-label draggable" data-field="ls" data-step="0.005" data-min="-0.1" data-max="0.3">Tracking</span>
+        <div class="prop-input-wrap">
+          <input class="prop-input" id="inp-ls" type="text" value="0.030" data-field="ls">
+          <span class="prop-unit">em</span>
+          <div class="prop-stepper">
+            <button class="prop-step" data-field="ls" data-dir="1">&#9650;</button>
+            <button class="prop-step" data-field="ls" data-dir="-1">&#9660;</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Font Weight -->
+      <div class="prop">
+        <span class="prop-label draggable" data-field="fw" data-step="100" data-min="100" data-max="900">Weight</span>
+        <div class="prop-input-wrap">
+          <input class="prop-input" id="inp-fw" type="text" value="700" data-field="fw">
+          <span class="prop-unit"></span>
+          <div class="prop-stepper">
+            <button class="prop-step" data-field="fw" data-dir="1">&#9650;</button>
+            <button class="prop-step" data-field="fw" data-dir="-1">&#9660;</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Line Height -->
+      <div class="prop">
+        <span class="prop-label draggable" data-field="lh" data-step="0.05" data-min="0.5" data-max="1.5">Line Height</span>
+        <div class="prop-input-wrap">
+          <input class="prop-input" id="inp-lh" type="text" value="0.85" data-field="lh">
+          <span class="prop-unit"></span>
+          <div class="prop-stepper">
+            <button class="prop-step" data-field="lh" data-dir="1">&#9650;</button>
+            <button class="prop-step" data-field="lh" data-dir="-1">&#9660;</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sep"></div>
+      <div class="section-label">Position: ВЛАД</div>
+
+      <div class="prop">
+        <span class="prop-label draggable" data-field="firstTop" data-step="1" data-min="0" data-max="100">Top</span>
+        <div class="prop-input-wrap">
+          <input class="prop-input" id="inp-firstTop" type="text" value="41" data-field="firstTop">
+          <span class="prop-unit">%</span>
+          <div class="prop-stepper">
+            <button class="prop-step" data-field="firstTop" data-dir="1">&#9650;</button>
+            <button class="prop-step" data-field="firstTop" data-dir="-1">&#9660;</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="prop">
+        <span class="prop-label draggable" data-field="firstLeft" data-step="1" data-min="0" data-max="100">Left</span>
+        <div class="prop-input-wrap">
+          <input class="prop-input" id="inp-firstLeft" type="text" value="27" data-field="firstLeft">
+          <span class="prop-unit">%</span>
+          <div class="prop-stepper">
+            <button class="prop-step" data-field="firstLeft" data-dir="1">&#9650;</button>
+            <button class="prop-step" data-field="firstLeft" data-dir="-1">&#9660;</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label" style="margin-top:4px">Position: КОВАЛЬСКИЙ</div>
+
+      <div class="prop">
+        <span class="prop-label draggable" data-field="lastTop" data-step="1" data-min="0" data-max="100">Top</span>
+        <div class="prop-input-wrap">
+          <input class="prop-input" id="inp-lastTop" type="text" value="48" data-field="lastTop">
+          <span class="prop-unit">%</span>
+          <div class="prop-stepper">
+            <button class="prop-step" data-field="lastTop" data-dir="1">&#9650;</button>
+            <button class="prop-step" data-field="lastTop" data-dir="-1">&#9660;</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="prop">
+        <span class="prop-label draggable" data-field="lastLeft" data-step="1" data-min="0" data-max="100">Left</span>
+        <div class="prop-input-wrap">
+          <input class="prop-input" id="inp-lastLeft" type="text" value="16" data-field="lastLeft">
+          <span class="prop-unit">%</span>
+          <div class="prop-stepper">
+            <button class="prop-step" data-field="lastLeft" data-dir="1">&#9650;</button>
+            <button class="prop-step" data-field="lastLeft" data-dir="-1">&#9660;</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sep"></div>
+
+      <!-- Toggles -->
+      <div class="toggle-row">
+        <label>Italic</label>
+        <button class="toggle on" id="togItalic"></button>
+      </div>
+
+      <div class="toggle-row">
+        <label>Uppercase</label>
+        <button class="toggle on" id="togUpper"></button>
+      </div>
+    </div>
+
+    <div class="loading" id="loadStatus"></div>
+  </aside>
+
+  <div class="right">
+    <div class="preview-area">
+      <div class="hero-portrait">
+        <img src="/photos/adyshkin.com_pt-3.jpg" alt="" onerror="this.style.display='none'">
+      </div>
+      <div class="hero-name">
+        <span class="hero-name-first" id="nFirst">ВЛАД<i class="handle handle--tl"></i><i class="handle handle--tr"></i><i class="handle handle--bl"></i><i class="handle handle--br"></i></span>
+        <span class="hero-name-last" id="nLast">КОВАЛЬСКИЙ<i class="handle handle--tl"></i><i class="handle handle--tr"></i><i class="handle handle--bl"></i><i class="handle handle--br"></i></span>
+      </div>
+      <!-- Distance guides -->
+      <div class="dist-line dist-line--h" id="distH"></div>
+      <div class="dist-line dist-line--v" id="distV"></div>
+      <div class="dist-label" id="distLabelH"></div>
+      <div class="dist-label" id="distLabelV"></div>
+    </div>
+
+    <div class="prompt-bar">
+      <div class="prompt-text" id="prompt">Выбери шрифт слева.</div>
+      <button class="copy-btn" id="copyBtn">Copy</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const GOOGLE_API = 'https://fonts.googleapis.com/css2?';
+const loaded = new Set();
+
+const FONTS = {
+  user: [
+    { name: 'Doloman Pavljenko', css: "'Doloman Pavljenko', sans-serif", tag: 'local', google: false },
+    { name: 'Impact', css: "Impact, 'Arial Black', sans-serif", tag: 'system', google: false },
+    { name: 'Bebas Neue', css: "'Bebas Neue', sans-serif", tag: 'Google', google: true },
+    { name: 'NK57 Monospace', css: "'NK57 Monospace', monospace", tag: 'CDN', google: false },
+  ],
+  groups: [
+    { title: 'Bold / Display', fonts: [
+      { name: 'Oswald', css: "'Oswald', sans-serif", tag: 'condensed' },
+      { name: 'Anton', css: "'Anton', sans-serif", tag: 'impact' },
+      { name: 'Montserrat', css: "'Montserrat', sans-serif", tag: 'geometric' },
+      { name: 'Russo One', css: "'Russo One', sans-serif", tag: 'techno' },
+      { name: 'Archivo Black', css: "'Archivo Black', sans-serif", tag: 'grotesque' },
+      { name: 'Teko', css: "'Teko', sans-serif", tag: 'narrow' },
+      { name: 'Passion One', css: "'Passion One', sans-serif", tag: 'rounded' },
+      { name: 'Fjalla One', css: "'Fjalla One', sans-serif", tag: 'contrast' },
+      { name: 'Unbounded', css: "'Unbounded', sans-serif", tag: 'modern' },
+      { name: 'Dela Gothic One', css: "'Dela Gothic One', sans-serif", tag: 'heavy' },
+      { name: 'Black Ops One', css: "'Black Ops One', sans-serif", tag: 'stencil' },
+      { name: 'Bungee', css: "'Bungee', sans-serif", tag: 'chromatic' },
+      { name: 'Prosto One', css: "'Prosto One', sans-serif", tag: 'display' },
+    ]},
+    { title: 'Serif / Editorial', fonts: [
+      { name: 'Playfair Display', css: "'Playfair Display', serif", tag: 'serif' },
+      { name: 'Cormorant Garamond', css: "'Cormorant Garamond', serif", tag: 'thin' },
+      { name: 'Spectral', css: "'Spectral', serif", tag: 'literary' },
+      { name: 'Oranienbaum', css: "'Oranienbaum', serif", tag: 'didone' },
+      { name: 'Yeseva One', css: "'Yeseva One', serif", tag: 'decorative' },
+      { name: 'Bitter', css: "'Bitter', serif", tag: 'slab' },
+      { name: 'Lora', css: "'Lora', serif", tag: 'calligraphy' },
+      { name: 'Merriweather', css: "'Merriweather', serif", tag: 'readable' },
+      { name: 'Noto Serif Display', css: "'Noto Serif Display', serif", tag: 'display' },
+      { name: 'EB Garamond', css: "'EB Garamond', serif", tag: 'classic' },
+      { name: 'Vollkorn', css: "'Vollkorn', serif", tag: 'book' },
+      { name: 'PT Serif', css: "'PT Serif', serif", tag: 'professional' },
+      { name: 'Alice', css: "'Alice', serif", tag: 'fairy tale' },
+      { name: 'Kelly Slab', css: "'Kelly Slab', serif", tag: 'slab' },
+      { name: 'Lobster', css: "'Lobster', cursive", tag: 'script' },
+    ]},
+    { title: 'Sans / Modern', fonts: [
+      { name: 'Raleway', css: "'Raleway', sans-serif", tag: 'elegant' },
+      { name: 'Exo 2', css: "'Exo 2', sans-serif", tag: 'futuristic' },
+      { name: 'Jura', css: "'Jura', sans-serif", tag: 'light' },
+      { name: 'Comfortaa', css: "'Comfortaa', sans-serif", tag: 'rounded' },
+      { name: 'Philosopher', css: "'Philosopher', sans-serif", tag: 'humanist' },
+      { name: 'Tenor Sans', css: "'Tenor Sans', sans-serif", tag: 'classic' },
+      { name: 'Poiret One', css: "'Poiret One', sans-serif", tag: 'art deco' },
+      { name: 'Play', css: "'Play', sans-serif", tag: 'gaming' },
+      { name: 'Rubik', css: "'Rubik', sans-serif", tag: 'rounded' },
+      { name: 'Nunito', css: "'Nunito', sans-serif", tag: 'soft' },
+      { name: 'Manrope', css: "'Manrope', sans-serif", tag: 'geometric' },
+      { name: 'Inter', css: "'Inter', sans-serif", tag: 'neutral' },
+      { name: 'Mulish', css: "'Mulish', sans-serif", tag: 'minimal' },
+    ]},
+    { title: 'Condensed / Narrow', fonts: [
+      { name: 'Yanone Kaffeesatz', css: "'Yanone Kaffeesatz', sans-serif", tag: 'narrow' },
+      { name: 'Alumni Sans', css: "'Alumni Sans', sans-serif", tag: 'condensed' },
+      { name: 'Roboto Condensed', css: "'Roboto Condensed', sans-serif", tag: 'narrow' },
+      { name: 'PT Sans Narrow', css: "'PT Sans Narrow', sans-serif", tag: 'narrow' },
+      { name: 'Fira Sans Condensed', css: "'Fira Sans Condensed', sans-serif", tag: 'condensed' },
+      { name: 'Barlow Condensed', css: "'Barlow Condensed', sans-serif", tag: 'condensed' },
+    ]},
+    { title: 'Script / Handwriting', fonts: [
+      { name: 'Marck Script', css: "'Marck Script', cursive", tag: 'handwriting' },
+      { name: 'Caveat', css: "'Caveat', cursive", tag: 'casual' },
+      { name: 'Pacifico', css: "'Pacifico', cursive", tag: 'fun' },
+      { name: 'Bad Script', css: "'Bad Script', cursive", tag: 'handwriting' },
+      { name: 'Pangolin', css: "'Pangolin', cursive", tag: 'comic' },
+    ]},
+    { title: 'Monospace', fonts: [
+      { name: 'Fira Code', css: "'Fira Code', monospace", tag: 'code' },
+      { name: 'JetBrains Mono', css: "'JetBrains Mono', monospace", tag: 'code' },
+      { name: 'Source Code Pro', css: "'Source Code Pro', monospace", tag: 'code' },
+      { name: 'Rubik Mono One', css: "'Rubik Mono One', monospace", tag: 'wide' },
+      { name: 'Press Start 2P', css: "'Press Start 2P', monospace", tag: 'pixel' },
+    ]},
+    { title: 'Experimental', fonts: [
+      { name: 'Permanent Marker', css: "'Permanent Marker', cursive", tag: 'marker' },
+      { name: 'Stalinist One', css: "'Stalinist One', serif", tag: 'soviet' },
+      { name: 'Rampart One', css: "'Rampart One', sans-serif", tag: 'outline' },
+    ]},
+  ]
+};
+
+/* ── Field config ── */
+const FIELDS = {
+  size:      { default: 12,   step: 0.5,   min: 3,    max: 24,  decimals: 1 },
+  ls:        { default: 0.03, step: 0.005, min: -0.1, max: 0.3, decimals: 3 },
+  fw:        { default: 700,  step: 100,   min: 100,  max: 900, decimals: 0 },
+  lh:        { default: 0.85, step: 0.05,  min: 0.5,  max: 1.5, decimals: 2 },
+  firstTop:  { default: 41,   step: 1,     min: 0,    max: 100, decimals: 0 },
+  firstLeft: { default: 27,   step: 1,     min: 0,    max: 100, decimals: 0 },
+  lastTop:   { default: 48,   step: 1,     min: 0,    max: 100, decimals: 0 },
+  lastLeft:  { default: 16,   step: 1,     min: 0,    max: 100, decimals: 0 },
+};
+
+const state = {
+  font: null,
+  size: 12,
+  ls: 0.03,
+  fw: 700,
+  lh: 0.85,
+  firstTop: 41,
+  firstLeft: 27,
+  lastTop: 48,
+  lastLeft: 16,
+  italic: true,
+  upper: true,
+};
+
+const nFirst = document.getElementById('nFirst');
+const nLast = document.getElementById('nLast');
+
+/* ── Font loading ── */
+function loadFont(name) {
+  if (loaded.has(name)) return Promise.resolve();
+  loaded.add(name);
+  const url = `${GOOGLE_API}family=${encodeURIComponent(name)}:ital,wght@0,400;0,700;0,800;0,900;1,400;1,700;1,800;1,900&display=swap&subset=cyrillic`;
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = url;
+  document.head.appendChild(link);
+  return new Promise(r => { link.onload = r; setTimeout(r, 2000); });
+}
+
+/* ── Font buttons ── */
+function mkBtn(font) {
+  const b = document.createElement('button');
+  b.className = 'font-btn';
+  b.innerHTML = `${font.name} <span class="tag">${font.tag}</span>`;
+  b.addEventListener('click', async () => {
+    state.font = font;
+    document.querySelectorAll('.font-btn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    if (font.google) {
+      document.getElementById('loadStatus').textContent = 'Loading font...';
+      await loadFont(font.name);
+      document.getElementById('loadStatus').textContent = '';
+    }
+    render();
+  });
+  return b;
+}
+
+FONTS.user.forEach(f => document.getElementById('userFonts').appendChild(mkBtn(f)));
+
+/* ── Build grouped font list ── */
+const groupsContainer = document.getElementById('fontGroups');
+const allGroupEls = [];
+
+FONTS.groups.forEach(group => {
+  const div = document.createElement('div');
+  div.className = 'font-group';
+
+  const header = document.createElement('div');
+  header.className = 'font-group-header';
+  header.innerHTML = `<span class="font-group-arrow">&#9660;</span><span class="font-group-title">${group.title}</span><span class="font-group-count">${group.fonts.length}</span>`;
+  header.addEventListener('click', () => div.classList.toggle('collapsed'));
+
+  const body = document.createElement('div');
+  body.className = 'font-group-body';
+
+  const btns = group.fonts.map(f => {
+    f.google = true;
+    const b = mkBtn(f);
+    b._fontName = f.name.toLowerCase();
+    b._fontTag = f.tag.toLowerCase();
+    b._groupTitle = group.title.toLowerCase();
+    body.appendChild(b);
+    return b;
+  });
+
+  div.appendChild(header);
+  div.appendChild(body);
+  groupsContainer.appendChild(div);
+  allGroupEls.push({ div, header, body, btns });
+});
+
+/* ── Search: filter fonts + auto expand/collapse groups ── */
+document.getElementById('fontSearch').addEventListener('input', e => {
+  const q = e.target.value.toLowerCase().trim();
+  allGroupEls.forEach(({ div, btns }) => {
+    let visible = 0;
+    btns.forEach(b => {
+      const show = !q || b._fontName.includes(q) || b._fontTag.includes(q) || b._groupTitle.includes(q);
+      b.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    div.style.display = visible ? '' : 'none';
+    if (q) div.classList.remove('collapsed');
+  });
+});
+
+/* ── Field helpers ── */
+function clampField(key, val) {
+  const f = FIELDS[key];
+  return Math.round(Math.min(f.max, Math.max(f.min, val)) * (10 ** f.decimals)) / (10 ** f.decimals);
+}
+
+function setField(key, val) {
+  state[key] = clampField(key, val);
+  const inp = document.getElementById('inp-' + key);
+  inp.value = state[key].toFixed(FIELDS[key].decimals);
+  render();
+}
+
+function stepField(key, dir) {
+  setField(key, state[key] + FIELDS[key].step * dir);
+}
+
+/* ── Input events ── */
+document.querySelectorAll('.prop-input').forEach(inp => {
+  const key = inp.dataset.field;
+
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      inp.blur();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      stepField(key, 1);
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      stepField(key, -1);
+    }
+  });
+
+  inp.addEventListener('blur', () => {
+    const v = parseFloat(inp.value);
+    if (!isNaN(v)) {
+      setField(key, v);
+    } else {
+      inp.value = state[key].toFixed(FIELDS[key].decimals);
+    }
+  });
+
+  // Select all on focus
+  inp.addEventListener('focus', () => inp.select());
+});
+
+/* ── Stepper buttons ── */
+document.querySelectorAll('.prop-step').forEach(btn => {
+  const key = btn.dataset.field;
+  const dir = parseInt(btn.dataset.dir);
+
+  // Click
+  btn.addEventListener('click', () => stepField(key, dir));
+
+  // Hold to repeat
+  let timer;
+  btn.addEventListener('mousedown', () => {
+    timer = setTimeout(() => {
+      timer = setInterval(() => stepField(key, dir), 80);
+    }, 400);
+  });
+  const stop = () => { clearTimeout(timer); clearInterval(timer); };
+  btn.addEventListener('mouseup', stop);
+  btn.addEventListener('mouseleave', stop);
+});
+
+/* ── Drag-to-scrub on labels ── */
+document.querySelectorAll('.prop-label.draggable').forEach(label => {
+  const key = label.dataset.field;
+  let startX, startVal, dragging = false;
+
+  label.addEventListener('mousedown', e => {
+    e.preventDefault();
+    startX = e.clientX;
+    startVal = state[key];
+    dragging = true;
+    label.classList.add('dragging');
+    document.body.style.cursor = 'ew-resize';
+    document.body.style.userSelect = 'none';
+  });
+
+  window.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    const dx = e.clientX - startX;
+    const sensitivity = e.shiftKey ? 0.1 : 1;
+    const delta = dx * FIELDS[key].step * sensitivity;
+    setField(key, startVal + delta);
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (!dragging) return;
+    dragging = false;
+    label.classList.remove('dragging');
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+  });
+});
+
+/* ── Toggles ── */
+document.getElementById('togItalic').addEventListener('click', function() {
+  state.italic = !state.italic;
+  this.classList.toggle('on', state.italic);
+  render();
+});
+document.getElementById('togUpper').addEventListener('click', function() {
+  state.upper = !state.upper;
+  this.classList.toggle('on', state.upper);
+  render();
+});
+
+/* ── Selection + Canvas drag ── */
+const distH = document.getElementById('distH');
+const distV = document.getElementById('distV');
+const distLabelH = document.getElementById('distLabelH');
+const distLabelV = document.getElementById('distLabelV');
+
+function selectEl(el) {
+  nFirst.classList.remove('selected');
+  nLast.classList.remove('selected');
+  if (el) el.classList.add('selected');
+}
+
+// Deselect on click on empty area
+document.querySelector('.preview-area').addEventListener('mousedown', e => {
+  if (e.target === e.currentTarget || e.target.closest('.hero-portrait')) {
+    selectEl(null);
+    hideDistLines();
+  }
+});
+
+function hideDistLines() {
+  distH.style.display = 'none';
+  distV.style.display = 'none';
+  distLabelH.style.display = 'none';
+  distLabelV.style.display = 'none';
+}
+
+function showDistLines(el) {
+  const area = document.querySelector('.preview-area');
+  const areaRect = area.getBoundingClientRect();
+  const elRect = el.getBoundingClientRect();
+
+  const top = elRect.top - areaRect.top;
+  const left = elRect.left - areaRect.left;
+  const right = areaRect.right - elRect.right;
+  const bottom = areaRect.bottom - elRect.bottom;
+
+  // Top distance line
+  distV.style.display = 'block';
+  distV.style.left = (left + elRect.width / 2) + 'px';
+  distV.style.top = '0';
+  distV.style.height = top + 'px';
+
+  distLabelV.style.display = 'block';
+  distLabelV.textContent = Math.round(top) + 'px';
+  distLabelV.style.left = (left + elRect.width / 2 + 6) + 'px';
+  distLabelV.style.top = (top / 2 - 8) + 'px';
+
+  // Left distance line
+  distH.style.display = 'block';
+  distH.style.top = (top + elRect.height / 2) + 'px';
+  distH.style.left = '0';
+  distH.style.width = left + 'px';
+
+  distLabelH.style.display = 'block';
+  distLabelH.textContent = Math.round(left) + 'px';
+  distLabelH.style.top = (top + elRect.height / 2 - 16) + 'px';
+  distLabelH.style.left = (left / 2 - 16) + 'px';
+}
+
+[nFirst, nLast].forEach(el => {
+  const isFirst = el === nFirst;
+  let dragging = false, startX, startY, origTop, origLeft;
+
+  el.addEventListener('mousedown', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    selectEl(el);
+    dragging = true;
+    const area = document.querySelector('.preview-area');
+    const rect = area.getBoundingClientRect();
+    startX = e.clientX;
+    startY = e.clientY;
+    origTop = isFirst ? state.firstTop : state.lastTop;
+    origLeft = isFirst ? state.firstLeft : state.lastLeft;
+
+    function onMove(ev) {
+      if (!dragging) return;
+      const dx = ((ev.clientX - startX) / rect.width) * 100;
+      const dy = ((ev.clientY - startY) / rect.height) * 100;
+      setField(isFirst ? 'firstTop' : 'lastTop', origTop + dy);
+      setField(isFirst ? 'firstLeft' : 'lastLeft', origLeft + dx);
+      showDistLines(el);
+    }
+
+    function onUp() {
+      dragging = false;
+      hideDistLines();
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+    }
+
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+  });
+});
+
+/* ── Render ── */
+function render() {
+  const family = state.font ? state.font.css : "'Playfair Display', serif";
+
+  [nFirst, nLast].forEach(el => {
+    el.style.fontFamily = family;
+    el.style.fontSize = `clamp(3rem, ${state.size}vw, 13rem)`;
+    el.style.letterSpacing = state.ls + 'em';
+    el.style.fontWeight = state.fw;
+    el.style.fontStyle = state.italic ? 'italic' : 'normal';
+    el.style.textTransform = state.upper ? 'uppercase' : 'none';
+    el.style.lineHeight = state.lh;
+  });
+
+  nFirst.style.top = state.firstTop + '%';
+  nFirst.style.left = state.firstLeft + '%';
+  nLast.style.top = state.lastTop + '%';
+  nLast.style.left = state.lastLeft + '%';
+
+  nFirst.textContent = state.upper ? 'ВЛАД' : 'Влад';
+  nLast.textContent = state.upper ? 'КОВАЛЬСКИЙ' : 'Ковальский';
+
+  updatePrompt();
+}
+
+function updatePrompt() {
+  if (!state.font) {
+    document.getElementById('prompt').textContent = 'Выбери шрифт слева.';
+    return;
+  }
+
+  const D = FIELDS;
+  const parts = [`Замени шрифт hero-имени на "${state.font.name}"`];
+
+  if (state.size !== D.size.default) parts.push(`размер ${state.size}vw`);
+  if (state.ls !== D.ls.default) parts.push(`letter-spacing: ${state.ls.toFixed(3)}em`);
+  if (state.fw !== D.fw.default) parts.push(`font-weight: ${state.fw}`);
+  if (state.lh !== D.lh.default) parts.push(`line-height: ${state.lh}`);
+  if (!state.italic) parts.push('убери italic');
+  if (!state.upper) parts.push('обычный регистр');
+
+  const posChanged =
+    state.firstTop !== D.firstTop.default || state.firstLeft !== D.firstLeft.default ||
+    state.lastTop !== D.lastTop.default || state.lastLeft !== D.lastLeft.default;
+  if (posChanged) {
+    parts.push(`ВЛАД: top ${state.firstTop}% left ${state.firstLeft}%`);
+    parts.push(`КОВАЛЬСКИЙ: top ${state.lastTop}% left ${state.lastLeft}%`);
+  }
+
+  if (state.font.google) parts.push('Подключи через Google Fonts');
+
+  document.getElementById('prompt').textContent = parts.join(', ') + '.';
+}
+
+/* ── Copy ── */
+document.getElementById('copyBtn').addEventListener('click', function() {
+  navigator.clipboard.writeText(document.getElementById('prompt').textContent).then(() => {
+    this.textContent = 'Copied!';
+    this.classList.add('copied');
+    setTimeout(() => { this.textContent = 'Copy'; this.classList.remove('copied'); }, 1500);
+  });
+});
+
+render();
+</script>
+</body>
+</html>

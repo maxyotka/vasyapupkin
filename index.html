@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Влад Ковальский — Ведущий мероприятий</title>
+  <meta name="description" content="Ведущий мероприятий Влад Ковальский — свадьбы, корпоративы, частные вечера." />
+  <meta property="og:title" content="Влад Ковальский — Ведущий мероприятий" />
+  <meta property="og:description" content="Свадьбы, корпоративы, частные вечера." />
+  <meta property="og:image" content="https://vladkovalsky.ru/og-image.jpg" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Влад Ковальский",
+    "jobTitle": "Ведущий мероприятий",
+    "url": "https://vladkovalsky.ru",
+    "sameAs": ["https://t.me/vladkovalsky"]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,800;0,900;1,400;1,700;1,800;1,900&family=Exo+2:ital,wght@0,200;0,300;0,400;0,500;0,600;1,200;1,300;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/styles/base.css" />
+  <link rel="stylesheet" href="/src/styles/nav.css" />
+  <link rel="stylesheet" href="/src/styles/hero.css" />
+  <link rel="stylesheet" href="/src/styles/formats.css" />
+  <link rel="stylesheet" href="/src/styles/footer.css" />
+  <link rel="stylesheet" href="/src/styles/responsive.css" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
+  <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="header__left">
+      <button class="header__item" id="contactBtn" aria-expanded="false" aria-controls="contactDropdown">
+        Контакт
+      </button>
+    </div>
+    <nav class="header__right" aria-label="Основная навигация">
+      <a class="header__item" href="/gallery.html">Галерея</a>
+      <a class="header__item" href="/blog.html">Мои мысли</a>
+    </nav>
+  </header>
+
+  <!-- Contact dropdown (sibling of header — outside mix-blend-mode context) -->
+  <div class="contact-dropdown" id="contactDropdown" aria-labelledby="contactBtn" aria-hidden="true">
+    <div class="contact-dropdown__inner">
+      <ul class="contact-dropdown__list">
+        <li class="contact-dropdown__item">
+          <a href="https://t.me/vladkovalsky" target="_blank" rel="noopener noreferrer">@vladkovalsky — Telegram</a>
+        </li>
+        <li class="contact-dropdown__item">
+          <a href="https://vk.com/vladkovalsky" target="_blank" rel="noopener noreferrer">vk.com/vladkovalsky</a>
+        </li>
+        <li class="contact-dropdown__item">
+          <a href="tel:+79991234567">+7 (999) 123-45-67</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <main>
+
+    <!-- Hero -->
+    <section class="hero" id="hero">
+      <div class="hero__portrait">
+        <img
+          src="/photos/adyshkin.com_pt-3.jpg"
+          alt="Влад Ковальский — ведущий мероприятий"
+          width="480"
+          height="600"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+      <h1 class="visually-hidden">Влад Ковальский — ведущий мероприятий</h1>
+      <div class="hero__name" aria-hidden="true">
+        <span class="hero__name-first">ВЛАД</span>
+        <span class="hero__name-last">КОВАЛЬСКИЙ</span>
+      </div>
+    </section>
+
+    <!-- Formats -->
+    <section class="formats" id="formats">
+      <div class="formats__track">
+
+        <div class="format-panel">
+          <div class="format-panel__fill">
+            <img src="/photos/adyshkin.com_pt-5.jpg" alt="Свадьба" />
+          </div>
+          <div class="format-panel__content">
+            <h2 class="format-panel__name">Свадьбы</h2>
+            <p class="format-panel__desc">Самый важный день в жизни — с правильным темпом и нужными словами.</p>
+          </div>
+        </div>
+
+        <div class="format-panel">
+          <div class="format-panel__content">
+            <h2 class="format-panel__name">Корпоративы</h2>
+            <p class="format-panel__desc">Команда запоминает то, что было живым — не по программе.</p>
+          </div>
+          <div class="format-panel__fill">
+            <img src="/photos/adyshkin.com_pt-13.jpg" alt="Корпоратив" />
+          </div>
+        </div>
+
+        <div class="format-panel">
+          <div class="format-panel__fill">
+            <img src="/photos/adyshkin.com_pt-25.jpg" alt="Частный вечер" />
+          </div>
+          <div class="format-panel__content">
+            <h2 class="format-panel__name">Частные вечера</h2>
+            <p class="format-panel__desc">Камерно, тонко, без пафоса — так, как вы это видите.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" id="footer">
+    <div class="footer__contacts">
+      <a href="tel:+79991234567" class="footer__contact-item">+7 (999) 123-45-67</a>
+      <a href="mailto:hello@vladkovalsky.ru" class="footer__contact-item">hello@vladkovalsky.ru</a>
+      <a href="https://t.me/vladkovalsky" target="_blank" rel="noopener noreferrer" class="footer__contact-item">@vladkovalsky</a>
+    </div>
+    <div class="footer__bottom">
+      <span class="footer__copy">© 2026 Влад Ковальский</span>
+      <a class="footer__credit" href="https://gundyrev.com" target="_blank" rel="noopener noreferrer">by Gundyrev</a>
+    </div>
+  </footer>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
