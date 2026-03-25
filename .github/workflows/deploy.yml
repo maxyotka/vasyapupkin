@@ -19,12 +19,16 @@ jobs:
 
       - run: npm run build
 
-      - name: Deploy to server
-        uses: easingthemes/ssh-deploy@v5
-        with:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
-          REMOTE_HOST: 85.198.70.195
-          REMOTE_USER: root
-          SOURCE: dist/
-          TARGET: /var/www/kovalsky/
-          ARGS: -rlgoDzvc --delete
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H 85.198.70.195 >> ~/.ssh/known_hosts
+
+      - name: Deploy via rsync
+        run: |
+          rsync -rlgoDzv --delete \
+            -e "ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no" \
+            dist/ \
+            root@85.198.70.195:/var/www/kovalsky/
