@@ -1,6 +1,6 @@
 // src/main.js
 import { initHeader, initContactDropdown } from './shared.js';
-import { initFormatsScroll, initFooterReveal } from './sections/formats-scroll.js';
+import { initFormatsScroll, initFooterReveal, initMobileFormats } from './sections/formats-scroll.js';
 
 initHeader();
 initContactDropdown();
@@ -24,5 +24,8 @@ initFormatsScroll();
 
 // Footer rises up from below after formats section
 initFooterReveal();
+
+// Mobile format panel reveal animations
+initMobileFormats();
 
 

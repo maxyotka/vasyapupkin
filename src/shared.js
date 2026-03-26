@@ -20,10 +20,13 @@ export function initHeader({ alwaysScrolled = false } = {}) {
     return;
   }
 
+  // On mobile, switch to solid header sooner (after 60% of viewport)
+  const threshold = () => window.innerWidth <= 768 ? 0.6 : 0.8;
   const onScroll = () => {
-    header.classList.toggle('is-scrolled', window.scrollY > window.innerHeight * 0.8);
+    header.classList.toggle('is-scrolled', window.scrollY > window.innerHeight * threshold());
   };
   window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 }
 
 // ─── Contact dropdown ───

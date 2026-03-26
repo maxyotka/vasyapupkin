@@ -15,7 +15,7 @@ async function collectConsoleErrors(page) {
 test.describe('Main page', () => {
   test('loads with correct title', async ({ page }) => {
     await page.goto(BASE + '/');
-    await expect(page).toHaveTitle(/Влад Ковальский/);
+    await expect(page).toHaveTitle(/Ведущий мероприятий/);
   });
 
   test('hero image is visible', async ({ page }) => {
@@ -159,7 +159,7 @@ test.describe('Blog list page', () => {
 test.describe('Blog article page', () => {
   test('article page loads', async ({ page }) => {
     await page.goto(BASE + '/blog/kak-vybrat-vedushchego/');
-    await expect(page).toHaveTitle(/Влад Ковальский/);
+    await expect(page).toHaveTitle(/Ведущий мероприятий/);
   });
 
   test('no console errors on article page', async ({ page }) => {

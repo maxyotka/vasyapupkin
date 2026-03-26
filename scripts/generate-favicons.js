@@ -27,7 +27,7 @@ function svg(size, bg, textFill) {
 
 // Manifest JSON
 const manifest = {
-  name: 'Влад Ковальский',
+  name: 'Ведущий мероприятий',
   short_name: 'ВК',
   description: 'Ведущий мероприятий',
   icons: [

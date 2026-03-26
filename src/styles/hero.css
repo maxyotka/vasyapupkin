@@ -12,6 +12,9 @@
   overflow: hidden;
 }
 
+/* Mobile background — hidden on desktop */
+.hero__mobile-bg { display: none; }
+
 /* Portrait container */
 .hero__portrait {
   position: relative;
@@ -117,38 +120,94 @@
   }
 }
 
-/* Mobile adjustments */
+/* ── Mobile: fullscreen curtain photo ── */
 @media (max-width: 768px) {
   .hero {
-    min-height: 500px;
+    min-height: 100svh;
+    min-height: 100vh;
+    background: #0a0a0a;
+    align-items: flex-end;
+    justify-content: flex-start;
   }
-  .hero__portrait {
-    width: clamp(180px, 55vw, 280px);
+
+  .hero__portrait { display: none; }
+  .hero__bw-layer { display: none; }
+
+  .hero__mobile-bg {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 1;
   }
-  .hero__name-first {
-    font-size: clamp(2.8rem, 15vw, 5rem);
-    left: 0.75rem;
-    top: 38%;
-    transform: translateY(-65%);
+  .hero__mobile-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 35% center;
+    filter: grayscale(100%) contrast(1.05);
   }
+
+  .hero__name {
+    mix-blend-mode: normal;
+    z-index: 10;
+  }
+
+  .hero__name-first,
   .hero__name-last {
-    font-size: clamp(2rem, 12vw, 4rem);
-    left: auto;
-    right: 0.75rem;
-    top: 50%;
-    transform: translateY(30%);
+    top: auto;
+    right: auto;
+    font-style: italic;
+  }
+
+  .hero__name-first {
+    font-size: clamp(3.5rem, 18vw, 6rem);
+    bottom: 22%;
+    left: 1.25rem;
+    transform: none;
+  }
+
+  .hero__name-last {
+    font-size: clamp(2.2rem, 11vw, 4rem);
+    bottom: 12%;
+    left: 1.25rem;
+    transform: none;
+  }
+
+  .hero__tagline {
+    bottom: 5%;
+    left: 1.25rem;
+    right: auto;
+    transform: none;
+    font-size: 0.7rem;
+    opacity: 0.7;
   }
 }
 
-/* Very small screens (320px) */
+/* Very small screens */
 @media (max-width: 374px) {
   .hero__name-first {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
   }
   .hero__name-last {
     font-size: 1.8rem;
   }
-  .hero__portrait {
-    width: 170px;
+}
+
+/* Landscape mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .hero {
+    min-height: 100svh;
+    min-height: 100vh;
+  }
+  .hero__name-first {
+    font-size: clamp(2.5rem, 10vw, 4rem);
+    bottom: 28%;
+  }
+  .hero__name-last {
+    font-size: clamp(1.8rem, 7vw, 3rem);
+    bottom: 14%;
+  }
+  .hero__tagline {
+    bottom: 4%;
   }
 }

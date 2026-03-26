@@ -101,6 +101,23 @@ lightbox?.addEventListener('click', (e) => {
   if (e.target === lightbox) closeLightbox();
 });
 
+// Swipe to close lightbox (mobile)
+let touchStartY = 0;
+let touchStartX = 0;
+lightbox?.addEventListener('touchstart', (e) => {
+  touchStartY = e.touches[0].clientY;
+  touchStartX = e.touches[0].clientX;
+}, { passive: true });
+
+lightbox?.addEventListener('touchend', (e) => {
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  // Swipe down or significant vertical swipe → close
+  if (Math.abs(dy) > 80 && Math.abs(dy) > Math.abs(dx)) {
+    closeLightbox();
+  }
+}, { passive: true });
+
 // Close on Escape; focus trap keeps focus inside while open
 document.addEventListener('keydown', (e) => {
   if (lightbox && !lightbox.hasAttribute('hidden')) {
